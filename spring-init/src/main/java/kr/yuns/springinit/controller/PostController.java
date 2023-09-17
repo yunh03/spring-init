@@ -1,5 +1,7 @@
 package kr.yuns.springinit.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import kr.yuns.springinit.data.dto.PostDto;
 import kr.yuns.springinit.data.dto.PostResponseDto;
 import kr.yuns.springinit.data.dto.PostUpdateDto;
@@ -19,28 +21,36 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<PostResponseDto> getPost(Long id) {
         PostResponseDto postResponseDto = postService.getPost(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
     }
 
-    @PostMapping("/new")
+    @PostMapping
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "X-AUTH-TOKEN",
+                    value = "사용자 접근 Token",
+                    required = true,
+                    dataType = "String",
+                    paramType = "header")
+    })
     public ResponseEntity<PostResponseDto> newPost(@RequestBody PostDto postDto) {
         PostResponseDto postResponseDto = postService.newPost(postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
     }
 
-    @PutMapping("/modify")
+    @PutMapping
     public ResponseEntity<PostResponseDto> modifyPost(@RequestBody PostUpdateDto postUpdateDto) throws Exception {
         PostResponseDto postResponseDto = postService.modifyPost(postUpdateDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<String> deletePost(Long id) throws Exception {
         postService.deletePost(id);
 
